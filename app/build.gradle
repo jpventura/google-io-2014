@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    compile "com.android.support:palette-v7:$rootProject.supportLibraryVersion"
     compile "com.google.android.gms:play-services-maps:$rootProject.googlePlayServicesVersion"
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

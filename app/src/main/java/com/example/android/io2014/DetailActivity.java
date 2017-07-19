@@ -27,6 +27,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
@@ -50,6 +52,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DetailActivity extends Activity implements OnMapReadyCallback {
+
+    private @ColorInt int mPrimaryDarkColor;
+    private @ColorInt int mPrimaryColor;
+    private @ColorInt int mPrimaryLightColor;
+
+    private @ColorInt int mPrimaryTextColor;
+    private @ColorInt int mSecondaryTextColor;
+
+    private @ColorInt int mDarkVibrant;
+    private @ColorInt int mLightMuted;
+    private @ColorInt int mLightVibrant;
+
+    private @ColorInt int mVibrant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +95,19 @@ public class DetailActivity extends Activity implements OnMapReadyCallback {
                 getWindow().getEnterTransition().removeListener(this);
             }
         });
+
+        mPrimaryTextColor = ContextCompat.getColor(this, R.color.primary_text);
+        mSecondaryTextColor = ContextCompat.getColor(this, R.color.secondary_text);
+
+        mPrimaryDarkColor = ContextCompat.getColor(this, R.color.primary_dark);
+        mPrimaryColor = ContextCompat.getColor(this, R.color.primary);
+        mPrimaryLightColor = ContextCompat.getColor(this, R.color.primary_light);
+
+        mDarkVibrant = ContextCompat.getColor(this, R.color.accent);
+        mLightMuted = ContextCompat.getColor(this, R.color.accent);
+        mLightVibrant = ContextCompat.getColor(this, R.color.accent);
+
+        mVibrant = ContextCompat.getColor(this, R.color.accent);
     }
 
     @Override
@@ -159,25 +187,36 @@ public class DetailActivity extends Activity implements OnMapReadyCallback {
     }
 
     private void applyPalette(Palette palette) {
-        getWindow().setBackgroundDrawable(new ColorDrawable(palette.getDarkMutedColor().getRgb()));
+        int primaryTextColor = palette.getLightVibrantColor(ContextCompat.getColor(this, R.color.primary_text));
+        int secondaryTextColor = palette.getLightVibrantColor(ContextCompat.getColor(this, R.color.secondary_text));
+
+        int primaryDarkColor = palette.getDarkMutedColor(ContextCompat.getColor(this, R.color.primary_dark));
+        int primaryColor = palette.getMutedColor(ContextCompat.getColor(this, R.color.primary));
+        int primaryLightColor = palette.getMutedColor(ContextCompat.getColor(this, R.color.primary_light));
+
+        int darkVibrant = palette.getDarkVibrantColor(ContextCompat.getColor(this, R.color.accent));
+        int lightMuted = palette.getLightMutedColor(ContextCompat.getColor(this, R.color.accent));
+        int lightVibrant = palette.getLightVibrantColor(ContextCompat.getColor(this, R.color.accent));
+
+        int vibrant = palette.getVibrantColor(ContextCompat.getColor(this, R.color.accent));
+
+        getWindow().setBackgroundDrawable(new ColorDrawable(primaryDarkColor));
 
         TextView titleView = (TextView) findViewById(R.id.title);
-        titleView.setTextColor(palette.getVibrantColor().getRgb());
+        titleView.setTextColor(vibrant);
 
         TextView descriptionView = (TextView) findViewById(R.id.description);
-        descriptionView.setTextColor(palette.getLightVibrantColor().getRgb());
+        descriptionView.setTextColor(lightVibrant);
 
-        colorRipple(R.id.info, palette.getDarkMutedColor().getRgb(),
-                palette.getDarkVibrantColor().getRgb());
-        colorRipple(R.id.star, palette.getMutedColor().getRgb(),
-                palette.getVibrantColor().getRgb());
+        colorRipple(R.id.info, primaryDarkColor, darkVibrant);
+        colorRipple(R.id.star, primaryColor, vibrant);
 
         View infoView = findViewById(R.id.information_container);
-        infoView.setBackgroundColor(palette.getLightMutedColor().getRgb());
+        infoView.setBackgroundColor(lightMuted);
 
         AnimatedPathView star = (AnimatedPathView) findViewById(R.id.star_container);
-        star.setFillColor(palette.getVibrantColor().getRgb());
-        star.setStrokeColor(palette.getLightVibrantColor().getRgb());
+        star.setFillColor(vibrant);
+        star.setStrokeColor(lightVibrant);
     }
 
     private void colorRipple(int id, int bgColor, int tintColor) {
