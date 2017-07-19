@@ -45,10 +45,12 @@ import com.example.android.io2014.ui.TransitionAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DetailActivity extends Activity {
+public class DetailActivity extends Activity implements OnMapReadyCallback {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +99,17 @@ public class DetailActivity extends Activity {
         findViewById(R.id.star).animate().alpha(0.0f);
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        double lat = getIntent().getDoubleExtra("lat", 37.6329946);
+        double lng = getIntent().getDoubleExtra("lng", -122.4938344);
+        float zoom = getIntent().getFloatExtra("zoom", 15.0f);
+
+        LatLng position = new LatLng(lat, lng);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, zoom));
+        googleMap.addMarker(new MarkerOptions().position(position));
+    }
+
     private void setupText() {
         TextView titleView = (TextView) findViewById(R.id.title);
         titleView.setText(getIntent().getStringExtra("title"));
@@ -106,15 +119,7 @@ public class DetailActivity extends Activity {
     }
 
     private void setupMap() {
-        GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
-        double lat = getIntent().getDoubleExtra("lat", 37.6329946);
-        double lng = getIntent().getDoubleExtra("lng", -122.4938344);
-        float zoom = getIntent().getFloatExtra("zoom", 15.0f);
-
-        LatLng position = new LatLng(lat, lng);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, zoom));
-        map.addMarker(new MarkerOptions().position(position));
+        ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
     }
 
     private void setOutlines(int star, int info) {
@@ -251,4 +256,5 @@ public class DetailActivity extends Activity {
         getMenuInflater().inflate(R.menu.detail, menu);
         return true;
     }
+
 }

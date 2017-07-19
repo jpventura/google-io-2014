@@ -20,6 +20,6 @@ android {
 }
 
 dependencies {
-    compile "com.google.android.gms:play-services:$rootProject.googlePlayServicesVersion"
+    compile "com.google.android.gms:play-services-maps:$rootProject.googlePlayServicesVersion"
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

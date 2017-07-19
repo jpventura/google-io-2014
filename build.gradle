@@ -26,7 +26,6 @@ ext {
     targetSdkVersion = 25
 
     // App dependencies
-    googlePlayServicesVersion = '6.5.87'
+    googlePlayServicesVersion = '11.0.2'
     supportLibraryVersion = '25.2.0'
 }
-
